@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>原型链的学习</title>
+</head>
+<body>
+
+</body>
+</html>
+<!--<script>-->
+    <!--var add = function (a, b) {-->
+        <!--if(typeof a !== "number" || typeof b !== "number"){-->
+            <!--throw {-->
+                <!--m: '参数必须是一个数字'-->
+            <!--}-->
+        <!--}else{-->
+            <!--return a + b;-->
+        <!--}-->
+    <!--}-->
+
+    <!--var try_it = function () {-->
+        <!--try {-->
+            <!--add('123');-->
+        <!--}catch (e){-->
+            <!--document.write(e.m)-->
+        <!--}-->
+    <!--}-->
+
+    <!--try_it();-->
+<!--</script>-->
+<!--<script>
+    var name = 'fuyu';
+    console.log(typeof name)//string
+    console.log(typeof name[0])//string
+    console.log(name[0]);//f
+    console.log(name.slice(2));//yu
+    console.log(name.slice(2, 3));//y
+</script>-->
+<!--<script>-->
+    <!--var friend={-->
+        <!--firstName: 'Good',-->
+        <!--'lastName': 'Man',-->
+        <!--'address': undefined,-->
+        <!--'phone': ["1234567",undefined],-->
+        <!--'fullName': function(){-->
+            <!--alert(this);-->
+            <!--return this.firstName + ' ' + this.lastName;-->
+        <!--}()-->
+    <!--};-->
+    <!--console.log(JSON.stringify(friend));//这一行返回什么呢？-->
+<!--</script>-->
+<!--<script>-->
+    <!--var add = function ccc(a, b) {-->
+        <!--return a + b;-->
+    <!--}-->
+
+    <!--console.log(add(1,2));-->
+<!--</script>-->
+<!--<script>-->
+    <!--function Room(roomNumber, type, money) {-->
+        <!--this.roomNumber = roomNumber;-->
+        <!--this.type = type;-->
+        <!--this.money = money;-->
+        <!--this.getInfo = function () {-->
+            <!--return this.roomNumber + ', ' + this.type + ', ' + this.money;-->
+        <!--}-->
+    <!--}-->
+        <!--var roomA = new Room('101', '标间', 200);-->
+    <!--console.log(roomA.type);-->
+<!--</script>-->
+<script>
+    function Room(roomNumber, type, money) {
+        this.roomNumber = roomNumber;    this.type = type;
+        this.money = money;
+    }
+    Room.prototype = {
+        constructor : Room,
+        getInfo : function() {
+            return this.roomNumber + ', ' + this.type + ', ' + this.money;
+        }
+    }
+    var roomA = new Room('101', '标间', 200);
+    console.log(roomA.getInfo());//101,标间,200
+    console.log(roomA.money);//101,标间,200
+
+</script>

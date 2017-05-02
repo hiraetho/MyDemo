@@ -2,9 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>vue_demo1</title>
 </head>
 <body>
 
 </body>
 </html>
+<!--1、输出 5 5 5 5 5;闭包中包含i的引用，闭包执行时i的值已经为5.-->
+<!--<script>-->
+    <!--for(var i = 0; i < 5; i++){-->
+        <!--setTimeout(function(){-->
+            <!--console.log(i);-->
+        <!--});-->
+    <!--}-->
+    <!--console.log('a');-->
+<!--</script>-->
+<!--2、立即执行的函数,输出 5 5 5 5 5;变量i没有传入的函数中.-->
+<!--<script>-->
+    <!--for(var i = 0; i < 5; i++){-->
+        <!--(function(){-->
+            <!--setTimeout(function(){-->
+                <!--console.log(i);-->
+            <!--});-->
+        <!--})(i);-->
+    <!--}-->
+<!--</script>-->
+<!--3、输出 0 1 2 3 4;setTimeout中引用的i每次都是函数的参数，是临时变量。-->
+<!--<script>-->
+    <!--for(var i = 0; i < 5; i++){-->
+        <!--(function(i){-->
+            <!--alert(i);-->
+            <!--setTimeout(function(){-->
+                <!--console.log(i);-->
+            <!--});-->
+        <!--})(i);-->
+    <!--}-->
+    <!--console.log('a')-->
+<!--</script>-->
+<!--4、输出 0 1 2 3 4;setTimeout可以接受字符串,如setTimeout("alert(1)");这里先执行(function(){console.log(i);}(i))相当于setTimeout(undefined)-->
+<!--<script>-->
+    <!--for(var i = 0; i < 5; i++){-->
+        <!--console.log('b')-->
+        <!--setTimeout(function(){-->
+            <!--console.log(i);-->
+        <!--}(i));-->
+    <!--}-->
+    <!--console.log('a');-->
+<!--</script>-->
+<!--与es6中promise混合使用,输出 1 4 5 3 2;Promise中的函数会立即执行-->
+<!--resolve之后代码也会执行-->
+<!--setTimeout下轮事件循环开始时，promise是本轮循环结束时-->
+<script>
+    console.log(1);
+    setTimeout(function(){
+        console.log(2);
+    });
+    let p = new Promise(function(resolve,reject){
+        resolve(3);
+        console.log(4);
+    });
+    console.log(5);
+    p.then(function(i){
+        console.log(i);
+    });
+</script>

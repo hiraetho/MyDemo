@@ -1,0 +1,27 @@
+
+javascript运行机制
+javascript是单线程运行的。单线程意味代码是顺序执行，但是在实际开发过程中，我们有很多异步代码的，如：事件回调、ajax回调、setTimeout等。既然是单线程的，这些异步代码如何实现的？
+原来除了代码执行线程外，还存在一个任务队列。 在页面载入中，js代码会在执行线程中顺序执行，等到执行线程将所有同步代码执行完成空闲后，会取任务队列中即将执行的任务，然后又在执行线程中执行。只要执行线程空闲就会一直取任务队列中取任务。
+当ajax回调返回（按钮点击），回调函数会添加到队列中，当执行线程是空闲的，回调函数就会立即执行；如果执行线程不是空闲的或者任务队列前面还有其他任何任务，当前任务将会等待。（任务队列有其他任何任务时，主线程不会是空闲的。）
+setTimeout原理是，在特点的时间过去后，将代码插入到队列中。插入到队列不一定是立即执行，它只能表示尽快执行。因此我们得出结论：
+setTimeout执行时间可能会大于延时设置的时间
+setTimeout中函数会在同步代码执行完后再执行
+setTimeout代码示例
+下面的例子是之前在知乎上看到的代码示例，个人觉很具有代表性，这里就列出来
+闭包中的使用
+for(var i = 0; i < 5; i++){    setTimeout(function(){       console.log(i);     });}
+输出 5 5 5 5 5;闭包中包含i的引用，闭包执行时i的值已经为5.
+立即执行的函数
+for(var i = 0; i < 5; i++){       (function(){           setTimeout(function(){              console.log(i);           });       })(i);}
+输出 5 5 5 5 5;变量i没有传入的函数中.
+for(var i = 0; i < 5; i++){    (function(i){        setTimeout(function(){           console.log(i);         });    })(i);}
+输出 0 1 2 3 4;setTimeout中引用的i每次都是函数的参数，是临时变量。
+接受字符串
+for(var i = 0; i < 5; i++){   setTimeout(function(){        console.log(i);     }(i));}
+输出 0 1 2 3 4;setTimeout可以接受字符串,如setTimeout("alert(1)");这里先执行(function(){console.log(i);}(i))相当于setTimeout(undefined)
+与es6中promise混合使用
+console.log(1);setTimeout(function(){   console.log(2); });let p = new Promise(function(resolve,reject){    resolve(3);    console.log(4);});console.log(5);p.then(function(i){    console.log(i);});
+输出 1 4 5 3 2;
+Promise中的函数会立即执行
+resolve之后代码也会执行
+setTimeout下轮事件循环开始时，promise是本轮循环结束时
